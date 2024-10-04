@@ -81,7 +81,6 @@ class cellZoneSet
             DynamicList<label>& samplingFaces,
             DynamicList<label>& samplingSegments,
             DynamicList<scalar>& samplingCurveDist
-            //,DynamicList<vector>& dUdtSamples
         ) const;
 
         //- Uses calcSamples to obtain samples. Copies them into *this.

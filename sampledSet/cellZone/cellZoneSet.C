@@ -35,8 +35,6 @@ License
 #include "word.H"
 #include "DynamicField.H"
 #include "fvMesh.H"
-//#include "fvcDdt.H"
-//#include "volFields.H"
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
@@ -56,15 +54,12 @@ void Foam::cellZoneSet::calcSamples
     DynamicList<label>& samplingFaces,
     DynamicList<label>& samplingSegments,
     DynamicList<scalar>& samplingCurveDist
-    //,DynamicList<vector>& dUdtSamples // New list to hold dUdt values
 ) const
 {
     const cellZoneMesh& zn = mesh().cellZones();
     DynamicList<label>  foundProc;
     const vectorField& my_cellC = mesh().cellCentres();
      
-    //const volVectorField& U = mesh().lookupObject<volVectorField>("U"); // Access velocity field
-    //volVectorField dUdt = fvc::ddt(U); // Calculate dUdt
 
     forAll(zn, sampleI)
     {
@@ -79,8 +74,7 @@ void Foam::cellZoneSet::calcSamples
                 samplingFaces.append(-1);
                 samplingSegments.append(0);
                 samplingCurveDist.append(1.0 * i);
-                
-                //dUdtSamples.append(dUdt[myzone[i]]); // Add dUdt value
+
 
                 foundProc.append(Pstream::myProcNo()); 
             }
@@ -99,7 +93,6 @@ void Foam::cellZoneSet::genSamples()
     DynamicList<label> samplingFaces;
     DynamicList<label> samplingSegments;
     DynamicList<scalar> samplingCurveDist;
-    //DynamicList<vector> dUdtSamples; // New list for dUdt values
 
     calcSamples
     (
@@ -108,7 +101,6 @@ void Foam::cellZoneSet::genSamples()
         samplingFaces,
         samplingSegments,
         samplingCurveDist
-        //,dUdtSamples // Pass the new list
     );
 
     samplingPts.shrink();
@@ -116,7 +108,6 @@ void Foam::cellZoneSet::genSamples()
     samplingFaces.shrink();
     samplingSegments.shrink();
     samplingCurveDist.shrink();
-    //dUdtSamples.shrink(); // Shrink dUdt samples
 
     // Move into *this
     setSamples
@@ -126,7 +117,6 @@ void Foam::cellZoneSet::genSamples()
         std::move(samplingFaces),
         std::move(samplingSegments),
         std::move(samplingCurveDist)
-        //,std::move(dUdtSamples)
     );
 
     if (debug)
