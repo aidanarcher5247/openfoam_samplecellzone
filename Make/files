@@ -1,0 +1,4 @@
+sampledSet/cellZone/cellZoneSet.C
+
+
+LIB = $(FOAM_USER_LIBBIN)/libsampleCellZone
